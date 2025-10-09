@@ -1,24 +1,27 @@
-# Use official Node.js 22 image (replace with 22.12.0 if/when available)
+# Use official Node.js image with your required version
 FROM node:22.12.0
 
 # Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json (or yarn.lock) first for better caching
+# Copy dependency files first for npm ci caching
 COPY package*.json ./
 
 # Install dependencies
 RUN npm ci
 
-# Copy the rest of the app
+# Copy app source
 COPY . .
 
-# Build your production assets
+# Build production assets
 RUN npm run build
 
-# Set environment for production
-ENV NODE_ENV=production
+# Expose app port (default 3000 for Coolify; change if needed)
+EXPOSE 3000
 
-# Start (replace with actual start command if different)
-CMD [ "npm", "run", "preview" ]
+# Default to PORT env var, fallback to 3000 if not set
+ENV PORT=3000
+
+# Start Vite on the expected port
+CMD [ "npm", "run", "preview", "--", "--port", "3000" ]
 
