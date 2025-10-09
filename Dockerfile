@@ -23,5 +23,5 @@ EXPOSE 3000
 ENV PORT=3000
 
 # Start Vite preview and bind to all interfaces (not just localhost)
-CMD [ "npm", "run", "preview", "--", "--port", "3000", "--host" ]
+CMD bash -c 'npm run preview -- --port ${PORT:-3000} --host'
 
